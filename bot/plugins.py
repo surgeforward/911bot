@@ -5,12 +5,17 @@ import logging
 
 @respond_to("help",re.IGNORECASE)
 def help(message):
-    message.reply("""Commands: help, register, emergency
+    message.reply("""Commands: help, why, register, emergency
 
+    Example: why
     Example: register Wife (Helen): 555-555-5555 Local PD (Toronto, Division 54): 555-555-5555
     Example: emergency @someuser
+    """)
 
-    In memory of Simon Hancock.
+@respond_to("why",re.IGNORECASE)
+def why(message):
+    message.reply("""
+    This bot was created by Surge Consulting in response to the tragic events on 2016-08-24. In memory of Simon Hancock.
     """)
 
 @respond_to("register (.*)",re.IGNORECASE)
