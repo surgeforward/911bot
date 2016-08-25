@@ -14,3 +14,7 @@ A 911 bot in memory of Simon Hancock
 @911bot register Helen (Wife): 555-555-5555 Sam (Dad): 666-666-6666
 @911bot emergency @someuser
 #+END_SRC
+
+* Design
+
+See [[file:design.org][design.org]]

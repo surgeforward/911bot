@@ -1,4 +1,3 @@
 *.pyc
-*.png
 apitoken.py
 contacts.json
