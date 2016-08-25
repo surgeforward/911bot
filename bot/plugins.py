@@ -18,12 +18,20 @@ def register(message,contactString):
     contactString = store.get(user)
     message.reply("Stored '{0}' for {1}".format(contactString,user['name']))
 
+def _get_user_by_id(message,userid):
+    for _,user in message._client.users.iteritems():
+        if user['id'] == userid:
+            return user
+
 @respond_to("emergency <@(.*)>",re.IGNORECASE)
 def emergency(message,userid):
     logging.info("Emergency for {}".format(userid))
-    for _,user in message._client.users.iteritems():
-        if user['id'] == userid:
-            contact = store.get(user)
-            message.reply(contact)
-            return
-    message.reply("{} not found".format(userid))
+    target = _get_user_by_id(message,userid)
+    req_user = _get_user_by_id(message,message._body['user'])
+    if target:
+        contact = store.get(target)
+        response = "Emergency contact for @{}: {}".format(target['name'],contact)
+        message.reply(response)
+        message.reply("Access by {} recorded".format(req_user['name']))
+    else:
+        message.reply("{} not found".format(userid))
