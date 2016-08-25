@@ -4,8 +4,6 @@ import os
 import datetime
 
 g_directory = "contacts"
-g_contacts = {}
-# map user id -> Record
 
 def _get_file(userid):
     return os.path.join(g_directory,userid+'.json')
