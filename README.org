@@ -1,0 +1,16 @@
+# 911bot
+A 911 bot in memory of Simon Hancock
+
+* Running
+
+1. Create a new bot under "Custom Integrations": https://surgellc.slack.com/apps/manage/custom-integrations
+2. Create a new file ~apitoken.py~ with the variable ~API_TOKEN~ set to the API token
+3. Install slackbot: ~python -m pip install slackbot~
+4. Start: ~python run.py~
+
+* Usage
+
+#+BEGIN_SRC
+@911bot register Helen (Wife): 555-555-5555 Sam (Dad): 666-666-6666
+@911bot emergency @someuser
+#+END_SRC
