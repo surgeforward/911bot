@@ -44,8 +44,23 @@ def emergency(message,userid):
         be logged to maintain privacy.""")
     else:
         g_emergencies.remove(userid)
-        contact = store.get(userid)
+        contact = store.get_info(userid)
         response = "Emergency info: {}".format(contact)
         message.reply(response)
         req_user = _get_user_by_id(message,message._body['user'])
+        store.record_access(userid,req_user['name'])
         message.reply("Access by {} recorded".format(req_user['name']))
+
+
+@respond_to("list-access")
+def list_access(message):
+    userid = message._body['user']
+    logging.info("Retreiving acess for {}".format(userid))
+    accesses = store.get_access(userid)
+    if not accesses:
+        message.reply("Your information has never been accessed")
+    else:
+        reply = "Your emergency info was accessed by\n"
+        for (when,who) in accesses:
+            reply += "\t{} on {}\n".format(who,when)
+        message.reply(reply)

@@ -1,27 +1,49 @@
 import logging
 import json
 import os
+import datetime
 
-g_filename = "contacts.json"
+g_directory = "contacts"
 g_contacts = {}
-# map user id -> list of contact strings
+# map user id -> Record
 
-def initialize():
-    global g_contacts
-    logging.info("Loading from {}".format(g_filename))
-    if os.path.isfile(g_filename):
-        with open(g_filename,'r') as f:
-            g_contacts = json.load(f)
-            logging.info("Loaded contacts for {} users".format(len(g_contacts)))
+def _get_file(userid):
+    return os.path.join(g_directory,userid+'.json')
+
+def _store_record(record):
+    with open(_get_file(record['id']),'w') as f:
+        f.write(json.dumps(record))
+
+def _get_record(userid):
+    record = {
+        'id': None,
+        'contact': "",
+        'access':[]
+    }
+    with open(_get_file(userid),'r') as f:
+        record.update(json.load(f))
+    return record
 
 def register(user,contactString):
     logging.info("Storing {0} for {1}".format(contactString,user['id']))
-    g_contacts[user['id']] = contactString
-    with open(g_filename,'w') as f:
-        f.write(json.dumps(g_contacts))
+    _store_record({
+        'id':user['id'],
+        'contact': contactString,
+        'access':[] # tuple of (datetime,user)
+        })
 
-def get(userid):
-    logging.info("Retreiving info for {}".format(str(userid)))
-    return g_contacts.get(userid,"Nothing on file")
+def get_info(userid):
+    logging.info("Retreiving info for {}".format(userid))
+    return _get_record(userid)['contact']
 
-initialize()
+def record_access(userid,requesting_user):
+    record = _get_record(userid)
+    record['access'].append((str(datetime.datetime.now()),requesting_user))
+    _store_record(record)
+
+def get_access(userid):
+    record = _get_record(userid)
+    return record['access']
+
+if not os.path.isdir(g_directory):
+    os.makedirs(g_directory)
