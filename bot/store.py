@@ -16,13 +16,12 @@ def initialize():
 
 def register(user,contactString):
     logging.info("Storing {0} for {1}".format(contactString,user['id']))
-    l = g_contacts.get(user['id'],[])
-    l.insert(0,contactString)
-    g_contacts[user['id']] = l
+    g_contacts[user['id']] = contactString
     with open(g_filename,'w') as f:
         f.write(json.dumps(g_contacts))
 
-def get(user):
-    return g_contacts.get(user['id'],["Nothing on file"])[0]
+def get(userid):
+    logging.info("Retreiving info for {}".format(str(userid)))
+    return g_contacts.get(userid,"Nothing on file")
 
 initialize()
