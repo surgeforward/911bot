@@ -14,8 +14,8 @@ def help(message):
 
 @respond_to("why",re.IGNORECASE)
 def why(message):
-    message.reply("""
-    This bot was created by Surge Consulting in response to the tragic events on 2016-08-24. In memory of Simon Hancock.
+    message.reply("""This bot was created by Surge Consulting in response to the tragic events
+    on 2016-08-24. In memory of Simon Hancock.
     """)
 
 @respond_to("register (.*)",re.IGNORECASE)
@@ -31,11 +31,21 @@ def _get_user_by_id(message,userid):
         if user['id'] == userid:
             return user
 
+# emergency requests for user
+g_emergencies = set()
+
 @respond_to("emergency <@(.*)>",re.IGNORECASE)
 def emergency(message,userid):
     logging.info("Emergency for {}".format(userid))
-    contact = store.get(userid)
-    response = "Emergency info: {}".format(contact)
-    message.reply(response)
-    req_user = _get_user_by_id(message,message._body['user'])
-    message.reply("Access by {} recorded".format(req_user['name']))
+    if userid not in g_emergencies:
+        g_emergencies.add(userid)
+        message.reply("""If this is an emergency, please request again. Otherwise note that this
+        information should not be used for any other purposes and requests will
+        be logged to maintain privacy.""")
+    else:
+        g_emergencies.remove(userid)
+        contact = store.get(userid)
+        response = "Emergency info: {}".format(contact)
+        message.reply(response)
+        req_user = _get_user_by_id(message,message._body['user'])
+        message.reply("Access by {} recorded".format(req_user['name']))
