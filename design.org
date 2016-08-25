@@ -1,0 +1,25 @@
+#+BEGIN_SRC plantuml :file dynamic_register.png
+!include config.iuml
+
+actor User
+User -> Bot: register(user,emergencyContactString)
+Bot -> DataStore: prependContactString(user,emergencyContactString)
+Bot -> DataStore: emergencyContactString = get(user.id)
+Bot --> User: success, "Registered: " + emegencyContactString
+#+END_SRC
+
+#+RESULTS:
+[[file:dynamic_register.png]]
+
+#+BEGIN_SRC plantuml :file dynamic_emergency.png
+!include config.iuml
+
+actor User
+User -> Bot: emergency(targetUser)
+Bot -> DataStore: emergencyContactString = get(targetUser.id)
+Bot --> User: emergencyContactString,"This request has been recorded"
+#+END_SRC
+
+#+RESULTS:
+[[file:dynamic_emergency.png]]
+
