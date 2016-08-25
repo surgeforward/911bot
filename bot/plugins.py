@@ -9,6 +9,8 @@ def help(message):
 
     Example: register Wife (Helen): 555-555-5555 Local PD (Toronto, Division 54): 555-555-5555
     Example: emergency @someuser
+
+    In memory of Simon Hancock.
     """)
 
 @respond_to("register (.*)",re.IGNORECASE)
