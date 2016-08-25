@@ -3,7 +3,7 @@
 
 actor User
 User -> Bot: register(user,emergencyContactString)
-Bot -> DataStore: prependContactString(user,emergencyContactString)
+Bot -> DataStore: register(user,emergencyContactString)
 Bot -> DataStore: emergencyContactString = get(user.id)
 Bot --> User: success, "Registered: " + emegencyContactString
 #+END_SRC
