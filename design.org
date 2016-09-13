@@ -3,8 +3,9 @@
 !include config.iuml
 
 actor "user:User" as User
-User -> Bot: register(user,emergencyContactString)
-Bot -> DataStore: register(user,emergencyContactString)
+User -> Bot: storeContact(emergencyContactString)
+Bot -> DataStore: storeContact(user.id,emergencyContactString,context)
+note right: Context is any object that would allow for easy "grepping" in case of emergency
 Bot -> DataStore: emergencyContactString = get(user.id)
 Bot --> User: success, "Registered: " + emegencyContactString
 #+END_SRC
