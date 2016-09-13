@@ -25,16 +25,16 @@ def storeContact(message,contactString):
     contactString = contactString.strip()
     if contactString != "":
         store.storeContact(user['id'],contactString,user)
-        contactString = store.get_info(user['id'])
+        contactString = store.getInfo(user['id'])
         message.reply(("Stored '{0}' for {1}. You may type " + \
                       "`store-contact` at any time to update it or with " + \
                       "no parameters to view your current information").
                       format(contactString,user['name']))
     else:
-        contactString = store.get_info(user['id'])
+        contactString = store.getInfo(user['id'])
         message.reply("Current contact: " + contactString)
 
-def _get_user_by_id(message,userid):
+def _getUserById(message,userid):
     for _,user in message._client.users.iteritems():
         if user['id'] == userid:
             return user
@@ -45,7 +45,7 @@ g_emergencies = dict()
 @respond_to("emergency <@(.*)>",re.IGNORECASE)
 def emergency(message,targetUserId):
     logging.info("Emergency for {}".format(targetUserId))
-    requestingUser = _get_user_by_id(message,message._body['user'])
+    requestingUser = _getUserById(message,message._body['user'])
     requestingUserId = requestingUser['id']
     g_emergencies[requestingUserId] = targetUserId
     message.reply("TL;DR Is this an emergency?")
@@ -55,24 +55,25 @@ def emergency(message,targetUserId):
                    "other life-and-death emergencies. To verify this " + \
                    "please respond by typing 'YES'. Your access of the " +\
                    "emergency information will be recorded.")
-                  .format(_get_user_by_id(message,targetUserId)['name']))
+                  .format(_getUserById(message,targetUserId)['name']))
 
 @respond_to("yes",re.IGNORECASE)
 def isEmergency(message):
-    requestingUser = _get_user_by_id(message,message._body['user'])
+    requestingUser = _getUserById(message,message._body['user'])
     targetUserId = g_emergencies[requestingUser['id']]
     del g_emergencies[requestingUser['id']]
-    contact = store.get_info(targetUserId)
+    contact = store.getInfo(targetUserId)
     response = "Emergency info: {}".format(contact)
     message.reply(response)
-    store.record_access(targetUserId,requestingUser['name'])
+    store.recordAccess(targetUserId,requestingUser['name'])
     message.reply("Access by {} recorded".format(requestingUser['name']))
 
+
 @respond_to("list-access")
-def list_access(message):
+def listAccess(message):
     userid = message._body['user']
     logging.info("Retreiving acess for {}".format(userid))
-    accesses = store.get_access(userid)
+    accesses = store.getAccess(userid)
     if not accesses:
         message.reply("Your information has never been accessed")
     else:

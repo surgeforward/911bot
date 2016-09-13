@@ -5,14 +5,14 @@ import datetime
 
 g_directory = "contacts"
 
-def _get_file(userid):
+def _getFile(userid):
     return os.path.join(g_directory,userid+'.json')
 
-def _store_record(record):
-    with open(_get_file(record['id']),'w') as f:
+def _storeRecord(record):
+    with open(_getFile(record['id']),'w') as f:
         f.write(json.dumps(record))
 
-def _get_record(userid):
+def _getRecord(userid):
     record = {
         'id': None,
         'contact': "",
@@ -20,30 +20,37 @@ def _get_record(userid):
         'context':{} # this is solely to allow for "grepping" in case of
                      # emergency
     }
-    with open(_get_file(userid),'r') as f:
+    with open(_getFile(userid),'r') as f:
         record.update(json.load(f))
     return record
 
 def storeContact(userId,contactString,context):
     logging.info("Storing {0} for {1}".format(contactString,userId))
-    _store_record({
+    record = {}
+    try:
+        record = _getRecord(userId)
+    except:
+        pass
+
+    record.update({
         'id':userId,
         'contact': contactString,
-        'access':[], # tuple of (datetime,user)
         'context': context
-        })
+    })
 
-def get_info(userid):
+    _storeRecord(record)
+
+def getInfo(userid):
     logging.info("Retreiving info for {}".format(userid))
-    return _get_record(userid)['contact']
+    return _getRecord(userid)['contact']
 
-def record_access(userid,requesting_user):
-    record = _get_record(userid)
+def recordAccess(userid,requesting_user):
+    record = _getRecord(userid)
     record['access'].append((str(datetime.datetime.now()),requesting_user))
-    _store_record(record)
+    _storeRecord(record)
 
-def get_access(userid):
-    record = _get_record(userid)
+def getAccess(userid):
+    record = _getRecord(userid)
     return record['access']
 
 if not os.path.isdir(g_directory):
