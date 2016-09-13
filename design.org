@@ -1,7 +1,7 @@
 #+BEGIN_SRC plantuml :file dynamic_register.png
 !include config.iuml
 
-actor User
+actor "user:User" as User
 User -> Bot: register(user,emergencyContactString)
 Bot -> DataStore: register(user,emergencyContactString)
 Bot -> DataStore: emergencyContactString = get(user.id)
@@ -14,12 +14,30 @@ Bot --> User: success, "Registered: " + emegencyContactString
 #+BEGIN_SRC plantuml :file dynamic_emergency.png
 !include config.iuml
 
-actor User
+actor "user:User" as User
 User -> Bot: emergency(targetUser)
+Bot -> User: "Is this really an emergency?"
+User -> Bot: "Yes"
+note right: or anything 
 Bot -> DataStore: emergencyContactString = get(targetUser.id)
-Bot --> User: emergencyContactString,"This request has been recorded"
+Bot --> User: emergencyContactString
+Bot -> DataStore: recordAccess(targetUser.id,user)
+Bot --> User: "This request has been recorded"
 #+END_SRC
 
 #+RESULTS:
 [[file:dynamic_emergency.png]]
+
+
+#+BEGIN_SRC plantuml :file dynamic_list_access.png
+!include config.iuml
+
+actor "user:User" as User
+User -> Bot: listAccesses()
+Bot -> DataStore: accesses = listAccesses(user.id)
+Bot --> User: accesses or "No accesses recorded"
+#+END_SRC
+
+#+RESULTS:
+[[file:dynamic_list_access.png]]
 
