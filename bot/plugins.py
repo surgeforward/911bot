@@ -25,13 +25,13 @@ def storeContact(message,contactString):
     contactString = contactString.strip()
     if contactString != "":
         store.storeContact(user['id'],contactString,user)
-        contactString = store.getInfo(user['id'])
+        contactString = store.getContact(user['id'])
         message.reply(("Stored '{0}' for {1}. You may type " + \
                       "`store-contact` at any time to update it or with " + \
                       "no parameters to view your current information").
                       format(contactString,user['name']))
     else:
-        contactString = store.getInfo(user['id'])
+        contactString = store.getContact(user['id'])
         message.reply("Current contact: " + contactString)
 
 def _getUserById(message,userid):
@@ -62,7 +62,7 @@ def isEmergency(message):
     requestingUser = _getUserById(message,message._body['user'])
     targetUserId = g_emergencies[requestingUser['id']]
     del g_emergencies[requestingUser['id']]
-    contact = store.getInfo(targetUserId)
+    contact = store.getContact(targetUserId)
     response = "Emergency info: {}".format(contact)
     message.reply(response)
     store.recordAccess(targetUserId,requestingUser['name'])

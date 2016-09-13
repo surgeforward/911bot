@@ -40,7 +40,7 @@ def storeContact(userId,contactString,context):
 
     _storeRecord(record)
 
-def getInfo(userid):
+def getContact(userid):
     logging.info("Retreiving info for {}".format(userid))
     return _getRecord(userid)['contact']
 
