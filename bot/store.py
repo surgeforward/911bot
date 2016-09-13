@@ -8,7 +8,6 @@ g_directory = "contacts"
 def _get_file(userid):
     return os.path.join(g_directory,userid+'.json')
 
-# TODO: Some of encryption would be nice
 def _store_record(record):
     with open(_get_file(record['id']),'w') as f:
         f.write(json.dumps(record))
