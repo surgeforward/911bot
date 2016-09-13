@@ -1,4 +1,5 @@
-#+BEGIN_SRC plantuml :file dynamic_register.png
+* Registering an emergency contact for self
+#+BEGIN_SRC plantuml :file dynamic_register.png :results none
 !include config.iuml
 
 actor "user:User" as User
@@ -8,10 +9,10 @@ Bot -> DataStore: emergencyContactString = get(user.id)
 Bot --> User: success, "Registered: " + emegencyContactString
 #+END_SRC
 
-#+RESULTS:
 [[file:dynamic_register.png]]
 
-#+BEGIN_SRC plantuml :file dynamic_emergency.png
+* Retrieving emergency contact for user
+#+BEGIN_SRC plantuml :file dynamic_emergency.png :results none
 !include config.iuml
 
 actor "user:User" as User
@@ -25,11 +26,10 @@ Bot -> DataStore: recordAccess(targetUser.id,user)
 Bot --> User: "This request has been recorded"
 #+END_SRC
 
-#+RESULTS:
 [[file:dynamic_emergency.png]]
 
-
-#+BEGIN_SRC plantuml :file dynamic_list_access.png
+* List emergency contact accesses for self
+#+BEGIN_SRC plantuml :file dynamic_list_access.png :results none
 !include config.iuml
 
 actor "user:User" as User
@@ -38,6 +38,5 @@ Bot -> DataStore: accesses = listAccesses(user.id)
 Bot --> User: accesses or "No accesses recorded"
 #+END_SRC
 
-#+RESULTS:
 [[file:dynamic_list_access.png]]
 
