@@ -20,11 +20,12 @@ actor "user:User" as User
 User -> Bot: emergency(targetUser)
 Bot -> User: "Is this really an emergency?"
 User -> Bot: "Yes"
-note right: or anything 
 Bot -> DataStore: emergencyContactString = get(targetUser.id)
 Bot --> User: emergencyContactString
 Bot -> DataStore: recordAccess(targetUser.id,user)
 Bot --> User: "This request has been recorded"
+actor "targetUser:User" as TargetUser
+Bot --> TargetUser: user.name + " asked for your emergency contact info. Please let them know if you're OK"
 #+END_SRC
 
 [[file:dynamic_emergency.png]]
