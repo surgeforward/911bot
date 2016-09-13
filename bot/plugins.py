@@ -75,8 +75,13 @@ def isEmergency(message):
     response = "Emergency info: {}".format(contact)
     message.reply(response)
     store.recordAccess(targetUserId,requestingUser['name'])
-    message.reply("Access by {} recorded".format(requestingUser['name']))
-
+    targetUser = _getUserById(message,targetUserId)
+    message.reply("Access by {0} recorded. {1} has been notified"
+                  .format(requestingUser['name'],targetUser['name']))
+    message._client.send_message("@" + targetUser['name'],
+                                 ("{0} asked for your emergency contact info." +\
+                                 " Please let @{0} know if you're OK")
+                                 .format(requestingUser['name']))
 
 @respond_to("list-access")
 def listAccess(message):
