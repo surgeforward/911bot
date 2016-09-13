@@ -6,7 +6,7 @@ actor "user:User" as User
 User -> Bot: storeContact(emergencyContactString)
 Bot -> DataStore: storeContact(user.id,emergencyContactString,context)
 note right: Context is any object that would allow for easy "grepping" in case of emergency
-Bot -> DataStore: emergencyContactString = get(user.id)
+Bot -> DataStore: emergencyContactString = getContact(user.id)
 Bot --> User: success, "Registered: " + emegencyContactString
 #+END_SRC
 
@@ -20,7 +20,7 @@ actor "user:User" as User
 User -> Bot: emergency(targetUser)
 Bot -> User: "Is this really an emergency?"
 User -> Bot: "Yes"
-Bot -> DataStore: emergencyContactString = get(targetUser.id)
+Bot -> DataStore: emergencyContactString = getContact(targetUser.id)
 Bot --> User: emergencyContactString
 Bot -> DataStore: recordAccess(targetUser.id,user)
 Bot --> User: "This request has been recorded"
