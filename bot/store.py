@@ -14,23 +14,20 @@ def _storeRecord(record):
 
 def _getRecord(userid):
     record = {
-        'id': None,
-        'contact': "",
+        'id': userid,
+        'contact': "No contact information stored",
         'access':[],
         'context':{} # this is solely to allow for "grepping" in case of
                      # emergency
     }
-    with open(_getFile(userid),'r') as f:
-        record.update(json.load(f))
+    if os.path.isfile(_getFile(userid)):
+        with open(_getFile(userid),'r') as f:
+            record.update(json.load(f))
     return record
 
 def storeContact(userId,contactString,context):
     logging.info("Storing {0} for {1}".format(contactString,userId))
-    record = {}
-    try:
-        record = _getRecord(userId)
-    except:
-        pass
+    record = _getRecord(userId)
 
     record.update({
         'id':userId,
