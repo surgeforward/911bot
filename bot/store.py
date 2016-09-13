@@ -16,18 +16,21 @@ def _get_record(userid):
     record = {
         'id': None,
         'contact': "",
-        'access':[]
+        'access':[],
+        'context':{} # this is solely to allow for "grepping" in case of
+                     # emergency
     }
     with open(_get_file(userid),'r') as f:
         record.update(json.load(f))
     return record
 
-def register(user,contactString):
-    logging.info("Storing {0} for {1}".format(contactString,user['id']))
+def storeContact(userId,contactString,context):
+    logging.info("Storing {0} for {1}".format(contactString,userId))
     _store_record({
-        'id':user['id'],
+        'id':userId,
         'contact': contactString,
-        'access':[] # tuple of (datetime,user)
+        'access':[], # tuple of (datetime,user)
+        'context': context
         })
 
 def get_info(userid):

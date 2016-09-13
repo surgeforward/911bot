@@ -5,52 +5,68 @@ import logging
 
 @respond_to("help",re.IGNORECASE)
 def help(message):
-    message.reply("""Commands: help, why, register, emergency
+    message.reply("""Commands: help, why, store-contact, emergency
 
     Example: why
-    Example: register Wife (Helen): 555-555-5555 Local PD (Toronto, Division 54): 555-555-5555
+    Example: store-contact Wife (Helen): 555-555-5555 Local PD: 555-555-5555
     Example: emergency @someuser
+    Example: list-access
     """)
 
 @respond_to("why",re.IGNORECASE)
 def why(message):
-    message.reply("""This bot was created by Surge Consulting in response to the tragic events
-    on 2016-08-24. In memory of Simon Hancock.
-    """)
+    message.reply("This bot was created by Surge Consulting in response to " +\
+                  "the tragic events of 2016-08-24. " +\
+                  "In memory of Simon Hancock.")
 
-@respond_to("register (.*)",re.IGNORECASE)
-def register(message,contactString):
+@respond_to("store-contact(.*)",re.IGNORECASE)
+def storeContact(message,contactString):
     user = message._client.users[message._body['user']]
-    store.register(user,contactString)
-    contactString = store.get(user['id'])
-    message.reply("Stored '{0}' for {1}".format(contactString,user['name']))
-    message.reply("If this does not look correct, try again")
+    contactString = contactString.strip()
+    if contactString != "":
+        store.storeContact(user['id'],contactString,user)
+        contactString = store.get_info(user['id'])
+        message.reply(("Stored '{0}' for {1}. You may type " + \
+                      "`store-contact` at any time to update it or with " + \
+                      "no parameters to view your current information").
+                      format(contactString,user['name']))
+    else:
+        contactString = store.get_info(user['id'])
+        message.reply("Current contact: " + contactString)
 
 def _get_user_by_id(message,userid):
     for _,user in message._client.users.iteritems():
         if user['id'] == userid:
             return user
 
-# emergency requests for user
-g_emergencies = set()
+# requesting user id -> target user id
+g_emergencies = dict()
 
 @respond_to("emergency <@(.*)>",re.IGNORECASE)
-def emergency(message,userid):
-    logging.info("Emergency for {}".format(userid))
-    if userid not in g_emergencies:
-        g_emergencies.add(userid)
-        message.reply("""If this is an emergency, please request again. Otherwise note that this
-        information should not be used for any other purposes and requests will
-        be logged to maintain privacy.""")
-    else:
-        g_emergencies.remove(userid)
-        contact = store.get_info(userid)
-        response = "Emergency info: {}".format(contact)
-        message.reply(response)
-        req_user = _get_user_by_id(message,message._body['user'])
-        store.record_access(userid,req_user['name'])
-        message.reply("Access by {} recorded".format(req_user['name']))
+def emergency(message,targetUserId):
+    logging.info("Emergency for {}".format(targetUserId))
+    requestingUser = _get_user_by_id(message,message._body['user'])
+    requestingUserId = requestingUser['id']
+    g_emergencies[requestingUserId] = targetUserId
+    message.reply("TL;DR Is this an emergency?")
+    message.reply(("Note that you are trying to get emergency " +\
+                   "information for {0}. This service should not be " + \
+                   "used lightly and is strictly for true medical or " + \
+                   "other life-and-death emergencies. To verify this " + \
+                   "please respond by typing 'YES'. Your access of the " +\
+                   "emergency information will be recorded.")
+                  .format(_get_user_by_id(message,targetUserId)['name']))
 
+@respond_to("yes",re.IGNORECASE)
+def isEmergency(message):
+    requestingUser = _get_user_by_id(message,message._body['user'])
+    targetUserId = g_emergencies[requestingUser['id']]
+    del g_emergencies[requestingUser['id']]
+    contact = store.get_info(targetUserId)
+    response = "Emergency info: {}".format(contact)
+    message.reply(response)
+    store.record_access(targetUserId,requestingUser['name'])
+    message.reply("Access by {} recorded".format(requestingUser['name']))
 
 @respond_to("list-access")
 def list_access(message):
