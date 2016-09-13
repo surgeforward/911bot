@@ -41,10 +41,19 @@ def _getUserById(message,userid):
 
 # requesting user id -> target user id
 g_emergencies = dict()
+g_useridMatcher = re.compile("<@(.*)>")
 
-@respond_to("emergency <@(.*)>",re.IGNORECASE)
-def emergency(message,targetUserId):
-    logging.info("Emergency for {}".format(targetUserId))
+@respond_to("emergency (.*)",re.IGNORECASE)
+def emergency(message,targetUserNameOrId):
+    logging.info("Emergency for {}".format(targetUserNameOrId))
+    match = g_useridMatcher.match(targetUserNameOrId)
+    if match:
+        targetUserId = match.group(1)
+    else:
+        targetUserId = message._client.find_user_by_name(targetUserNameOrId)
+    if targetUserId is None:
+        message.reply("No such user found. Try emergency @username")
+        return
     requestingUser = _getUserById(message,message._body['user'])
     requestingUserId = requestingUser['id']
     g_emergencies[requestingUserId] = targetUserId
