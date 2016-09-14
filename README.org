@@ -19,7 +19,7 @@ A 911 bot in memory of Simon Hancock
 #+BEGIN_SRC sh
   docker build -t 911bot .
   docker volume create --name contacts # or however you want to do it
-  docker run --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+  docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
 #+END_SRC
 * Design
 
