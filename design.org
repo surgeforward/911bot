@@ -57,12 +57,12 @@ BotImage o-- String: slackApiKeyParmeter
 
 [[file:deployment.png]]
 
-#+BEGIN_SRC plantuml :file dynamic_create_container.png :results none
+#+BEGIN_SRC plantuml :file dynamic_run_container.png :results none
 !include config.iuml
 
 actor User
-User -> Docker: create("911bot",env={SLACK_API_TOKEN="xxxx",CONTACTS_DIRECTORY="/contacts"})
+User -> Docker: run("911bot",env={SLACK_API_TOKEN="xxxx",CONTACTS_DIRECTORY="/contacts"})
 Docker --> User: container
 #+END_SRC
 
-[[file:dynamic_create_container.png]]
+[[file:dynamic_run_container.png]]
