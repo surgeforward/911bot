@@ -1,0 +1,26 @@
+# 911bot
+A 911 bot in memory of Simon Hancock
+
+* Running
+
+1. Create a new bot under "Custom Integrations": https://surgellc.slack.com/apps/manage/custom-integrations
+2. Create a new file ~apitoken.py~ with the variable ~API_TOKEN~ set to the API token
+3. Install requirements: ~python -m pip install -r requirements.txt~
+4. Start: ~python run.py~
+
+* Usage
+
+#+BEGIN_SRC
+@911bot store-contact Helen (Wife): 555-555-5555 Sam (Dad): 666-666-6666
+@911bot emergency @someuser
+#+END_SRC
+
+* Deployment with docker
+#+BEGIN_SRC sh
+  docker build -t 911bot .
+  docker volume create --name contacts # or however you want to do it
+  docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+#+END_SRC
+* Design
+
+See [[file:design.org][design.org]]

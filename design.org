@@ -1,0 +1,68 @@
+* Registering an emergency contact for self
+#+BEGIN_SRC plantuml :file dynamic_register.png :results none
+!include config.iuml
+
+actor "user:User" as User
+User -> Bot: storeContact(emergencyContactString)
+Bot -> DataStore: storeContact(user.id,emergencyContactString,context)
+note right: Context is any object that would allow for easy "grepping" in case of emergency
+Bot -> DataStore: emergencyContactString = getContact(user.id)
+Bot --> User: success, "Registered: " + emegencyContactString
+#+END_SRC
+
+[[file:dynamic_register.png]]
+
+* Retrieving emergency contact for user
+#+BEGIN_SRC plantuml :file dynamic_emergency.png :results none
+!include config.iuml
+
+actor "user:User" as User
+User -> Bot: emergency(targetUser)
+Bot -> User: "Is this really an emergency?"
+User -> Bot: "Yes"
+Bot -> DataStore: emergencyContactString = getContact(targetUser.id)
+Bot --> User: emergencyContactString
+Bot -> DataStore: recordAccess(targetUser.id,user)
+Bot --> User: "This request has been recorded"
+actor "targetUser:User" as TargetUser
+Bot --> TargetUser: user.name + " asked for your emergency contact info. Please let them know if you're OK"
+#+END_SRC
+
+[[file:dynamic_emergency.png]]
+
+* List emergency contact accesses for self
+#+BEGIN_SRC plantuml :file dynamic_list_access.png :results none
+!include config.iuml
+
+actor "user:User" as User
+User -> Bot: listAccesses()
+Bot -> DataStore: accesses = listAccesses(user.id)
+Bot --> User: accesses or "No accesses recorded"
+#+END_SRC
+
+[[file:dynamic_list_access.png]]
+
+
+* Deployment
+#+BEGIN_SRC plantuml :file deployment.png :results none
+!include config.iuml
+
+BotImage *-- Python27Image
+Python27Image *-- "Jessie (Debian) Image"
+
+BotImage o-- Directory: contactsDirectoryParameter
+note left: This must be secured somehow (encrypted,password protected?)
+BotImage o-- String: slackApiKeyParmeter
+#+END_SRC
+
+[[file:deployment.png]]
+
+#+BEGIN_SRC plantuml :file dynamic_run_container.png :results none
+!include config.iuml
+
+actor User
+User -> Docker: run("911bot",env={SLACK_API_TOKEN="xxxx",CONTACTS_DIRECTORY="/contacts"})
+Docker --> User: container
+#+END_SRC
+
+[[file:dynamic_run_container.png]]
