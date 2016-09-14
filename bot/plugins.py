@@ -57,6 +57,7 @@ def emergency(message,targetUserNameOrId):
     requestingUser = _getUserById(message,message._body['user'])
     requestingUserId = requestingUser['id']
     g_emergencies[requestingUserId] = targetUserId
+    targetUser = _getUserById(message,targetUserId)
     message.reply("TL;DR Is this an emergency? Type '@911bot YES' if so")
     message.reply(("Note that you are trying to get emergency " +\
                    "information for {0}. This service should not be " + \
@@ -64,7 +65,7 @@ def emergency(message,targetUserNameOrId):
                    "other life-and-death emergencies. To verify this " + \
                    "please respond by typing '@911bot YES'. Your access of " + \
                    "the emergency information will be recorded.")
-                  .format(_getUserById(message,targetUserId)['name']))
+                  .format(targetUser['name']))
 
 @respond_to("yes",re.IGNORECASE)
 def isEmergency(message):

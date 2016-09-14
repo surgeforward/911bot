@@ -3,7 +3,7 @@ import json
 import os
 import datetime
 
-g_directory = "contacts"
+g_directory = os.environ.get("CONTACTS_DIRECTORY","contacts")
 
 def _getFile(userid):
     return os.path.join(g_directory,userid+'.json')
@@ -52,3 +52,5 @@ def getAccess(userid):
 
 if not os.path.isdir(g_directory):
     os.makedirs(g_directory)
+
+os.system("ls {}".format(g_directory))

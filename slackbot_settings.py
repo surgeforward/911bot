@@ -1,6 +1,4 @@
-from apitoken import API_TOKEN
-
-DEFAULT_REPLY = "Sorry but I didn't understand you"
+DEFAULT_REPLY = "Sorry but I didn't understand you. Try `help`"
 DEBUG=1
 
 PLUGINS = [

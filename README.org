@@ -15,6 +15,12 @@ A 911 bot in memory of Simon Hancock
 @911bot emergency @someuser
 #+END_SRC
 
+* Deployment with docker
+#+BEGIN_SRC sh
+  docker build -t 911bot .
+  docker volume create --name contacts # or however you want to do it
+  docker run --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+#+END_SRC
 * Design
 
 See [[file:design.org][design.org]]
