@@ -4,7 +4,7 @@ A 911 bot in memory of Simon Hancock
 * Running
 
 1. Create a new bot under "Custom Integrations": https://surgellc.slack.com/apps/manage/custom-integrations
-2. Create a new file ~apitoken.py~ with the variable ~API_TOKEN~ set to the API token
+2. Set the environment variable ~SLACKBOT_API_TOKEN~ to the API token
 3. Install requirements: ~python -m pip install -r requirements.txt~
 4. Start: ~python run.py~
 
