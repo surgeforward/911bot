@@ -9,7 +9,7 @@ A 911 bot in memory of Simon Hancock
 4. Start: ~python run.py~
 5. For health check:
    1. define ~HEALTHCHECK_SLACK_TOKEN~ (should be a different user than the 911bot)
-   2. run ~python test_health.py~
+   2. run ~python run_healthcheck.py~ - This process will return 0 if check succeeded
 
 * Usage
 
