@@ -24,9 +24,7 @@ def slackCall(methodName,**params):
     if result['ok']: return result
     else: raise RuntimeError,"Error calling %s: %s" % (methodName,result)
 
-def sendMessage(channel, message):
-    latest = slackCall("im.history",channel=channel['channel']['id'],
-                       count=1)['messages'][0]['ts']
+def sendMessage(channel, message,numMessages = 1):
     msg = slackCall("chat.postMessage",
                     channel=dm['channel']['id'],
                     text=message,
@@ -35,11 +33,15 @@ def sendMessage(channel, message):
 
     time.sleep(1)
 
-    return slackCall("im.history",channel=channel['channel']['id'],
-                     count=1)['messages'][0]['text']
+    messages = slackCall("im.history",channel=channel['channel']['id'],
+                         count=numMessages)['messages']
+    if numMessages == 1:
+        return messages[0]['text']
+    else:
+        return messages[:numMessages]
 
 
-slackCall("auth.test")
+auth = slackCall("auth.test")
 users = slackCall('users.list',presence=1)['members']
 bot = None
 for user in users:
@@ -50,9 +52,14 @@ for user in users:
 dm = slackCall('im.open',user=bot['id'])
 print sendMessage(dm,"Hello, world")
 print sendMessage(dm,"help")
-dt = datetime.datetime.now()
+dt = str(datetime.datetime.now())
 print sendMessage(dm,"store-contact %s" % (dt))
-contact = sendMessage(dm,"store-contact")
-print contact
-if contact.find(str(dt)) == -1:
-    raise RuntimeError,"Could not successfully store or retreive contact info"
+verify = sendMessage(dm,"emergency {}".format(auth['user']))
+if verify.find("verify") == -1:
+    raise RuntimeError,"Unexpected response to emergency: {}".format(verify)
+# Bot sends 3 messages in response, we need all of them and want the last
+# message
+info = sendMessage(dm,"YES",numMessages=3)[-1]['text']
+print info
+if info.find(dt) == -1:
+    raise RuntimeError,"Contact info not retrieved correctly: {}".format(info)
