@@ -31,6 +31,9 @@ def sendMessage(channel, message,numMessages = 1):
                     as_user=True
     )
 
+    # Sleep so that the message has time to do the healthcheck -> slack ->
+    # 911bot -> filesystem -> slack round trip. I mean, it should really be
+    # more than 1 second to be safe. This is a hack.
     time.sleep(1)
 
     messages = slackCall("im.history",channel=channel['channel']['id'],
