@@ -8,6 +8,4 @@ PLUGINS = [
     'bot.plugins'
 ]
 
-if not os.environ.has_key("SLACKBOT_API_TOKEN"):
-   raise RuntimeError,"Missing env variable: SLACKBOT_API_TOKEN"
-API_TOKEN=os.environ['SLACKBOT_API_TOKEN'].strip()
+API_TOKEN = os.environ['SLACKBOT_API_TOKEN'].strip()
