@@ -5,9 +5,11 @@ import requests
 import argparse
 import json
 import time
+import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("slack_token",
+parser.add_argument("--slack-token",
+                    default=os.environ.get("HEALTHCHECK_SLACK_TOKEN",None),
                     help="Slack API token. Must be different " +\
                     "from the bot token. Generate here: https://api.slack.com/web")
 
