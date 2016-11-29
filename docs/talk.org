@@ -1,0 +1,105 @@
+#+REVEAL_ROOT: https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0
+#+OPTIONS: toc:nil reveal_title_slide:nil num:nil
+#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_THEME: solarized
+
+# Needed to not show figure numbers
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="./stylesheet.css" />
+
+* 911bot - The story
+
+** What is 911bot?
+
+   An emergency contact storage and retrieval system for internal use at Surge
+
+** Why? Simon Hancock
+   #+ATTR_HTML: :height 400px
+   [[./simon.jpg]]
+   
+** What happened
+   #+ATTR_HTML: :height 500px
+   [[./mattsemail.png]]
+
+** Main issue: delay in contacting emergency services
+
+* The predictably nerdy response 
+
+** 911bot is born
+   [[./911bot_born.png]]
+   [[./911botdev.png]]
+
+** OK it's getting serious
+   [[./mvp_stories.png]]
+
+** And... It's official
+   [[./github.png]]
+
+** A team effort
+
+* Minimum Viable Product
+  + Store contact info through Slack securely
+  + Access information through Slack in an emergency
+  + Detect who has accessed emergency information
+  + Fallback access options in case 911bot is down
+
+** Basic usage
+   [[./usage.png]]
+
+* DevOps
+
+** Design
+   [[../deployment.png]]
+
+** Implementation 
+
+   + Docker + Kubernetes
+   + Built on http://quay.io
+ 
+*** Docker config
+
+    #+CAPTION: @cwspear
+    #+INCLUDE: "../Dockerfile" src dockerfile
+    Fallback: all information is stored on a persistent Kubernetes volume, in a
+    text file under the ~/contacts~ directory
+*** Kubernetes
+   
+    #+CAPTION: @jmartin2 and @shrabok
+    [[./classified.jpg]]
+    + Secret API token
+    + Persistent storage
+    + Health check (WIP)
+
+* Development
+
+** Design (Emergency example)
+
+   #+CAPTION: The sequence of messaging is intended to get the information to the requesting user as soon as possible
+   [[../dynamic_emergency.png]]
+
+** Code (Emergency example)
+
+   #+INCLUDE: "../bot/plugins.py" src python :lines "70-85" 
+
+* Testing 
+
+  + A full top to bottom test is included as part of ~run_healthcheck.py~
+  + This will run all the time to ensure the bot is operational and functioning
+    as intended
+
+* Status
+
+  + The bot is stable
+  + The data is as secure as other Surge services (JIRA, etc)
+  + Additionally, the bot informs the target user if someone attempts to access
+    the information through the bot
+
+* Your turn
+
+  + Add your info (let's hope we never have to access it!)
+    + ~@911bot store-contact <local contact, local pd, address>~
+  + Try and break it
+    + ~@911bot yes~
+
+* Questions?
+
+
