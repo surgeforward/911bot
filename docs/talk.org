@@ -4,7 +4,7 @@
 #+REVEAL_THEME: solarized
 
 # Needed to not show figure numbers
-#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="./stylesheet.css" />
+#+REVEAL_EXTRA_CSS: ./stylesheet.css
 
 * 911bot - The story
 
@@ -107,6 +107,23 @@
   + Try and break it
     + ~@911bot yes~
 
+  
+** Actually...
+   [[./live.gif]]
+
+   + Start DMing the bot (@911bot)
+   + Make it a party
+   + Don't request someone else's info unless you have their agreement
+   + I'll wait for a couple of minutes
+
+** So... what broke?
+
+   :)
+
+* Things to check out
+
+  + #911bot-dev on Slack
+  + Git repo: https://github.com/surgeforward/911bot/
+ 
+
 * Questions?
-
-
