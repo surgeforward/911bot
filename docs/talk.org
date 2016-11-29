@@ -76,9 +76,16 @@
    #+CAPTION: The sequence of messaging is intended to get the information to the requesting user as soon as possible
    [[../dynamic_emergency.png]]
 
-** Code (Emergency example)
+** Implementation (Emergency example)
 
    #+INCLUDE: "../bot/plugins.py" src python :lines "70-85" 
+
+** A bit about the technology
+
+   + Bot uses Slack's Real-Time Messaging (RTM) API
+     + WebSockets using JSON as a payload format
+   + Health check uses Slack's HTTP RPC API
+     + Why? The RTM API is a PITA
 
 * Testing 
 
