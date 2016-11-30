@@ -13,7 +13,7 @@
 #+CAPTION: An emergency contact storage and retrieval chat bot
 [[./logo.png]]
 
-* 911bot - The story
+* The story
 
 ** Why? Simon Hancock
    #+ATTR_HTML: :height 400px
@@ -50,14 +50,14 @@
 
 * DevOps
 
-** Design
-   [[../deployment.png]]
-
-** Implementation 
-
    + Docker + Kubernetes
    + Built on http://quay.io
+
+** Design
+   [[../deployment.png]]
  
+** Implementation 
+
 *** Docker config
 
     #+CAPTION: @cwspear
@@ -73,7 +73,15 @@
     + Health check (WIP)
 
 * Development
+  + Python 2.7 (See [[https://github.com/surgeforward/911bot/issues/5][surgeforward#5]] to upgrade to Python 3)
+    + ~slackbot~ package for RTM API
+    + ~requests~ package for health check
+** A bit about the technology
 
+   + Bot uses Slack's Real-Time Messaging (RTM) API
+     + WebSockets using JSON as a payload format
+   + Health check uses Slack's HTTP RPC API
+     + Why? The RTM API is a PITA
 ** Design (Emergency example)
 
    #+CAPTION: The sequence of messaging is intended to get the information to the requesting user as soon as possible
@@ -83,18 +91,14 @@
 
    #+INCLUDE: "../bot/plugins.py" src python :lines "70-85" 
 
+** Implementation (DataStore - recordAccess)
+   #+INCLUDE: ../bot/store.py src python :lines "44-48"
 ** Implementation (DataStore)
    #+INCLUDE: ../bot/store.py src python :lines "11-14"
    #+INCLUDE: ../bot/store.py src python :lines "15-27"
 
 ** Implementation (DataStore)
    #+INCLUDE: ../bot/store.py src python :lines "28-40"
-** A bit about the technology
-
-   + Bot uses Slack's Real-Time Messaging (RTM) API
-     + WebSockets using JSON as a payload format
-   + Health check uses Slack's HTTP RPC API
-     + Why? The RTM API is a PITA
 
 * Testing 
 
@@ -117,7 +121,7 @@
     + ~@911bot yes~
 
   
-** Actually...
+** 
    [[./live.gif]]
 
    + Start DMing the bot (@911bot)
