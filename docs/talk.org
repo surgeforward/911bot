@@ -118,10 +118,15 @@
    + Make it a party
    + Don't request someone else's info unless you have their agreement
      + Feel free to request mine (@ssomani)
+   #+BEGIN_NOTES
+   Do it yourself in Slack
+   #+END_NOTES 
 
 ** So... what broke?
 
    :)
+
+   File an issue at the Github: https://github.com/surgeforward/911bot/issues
 
 * Things to check out
 
@@ -130,3 +135,7 @@
  
 
 * Questions?
+
+  Some example questions:
+  + What other approaches did you consider?
+  + Do you really not have any unit tests?
