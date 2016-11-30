@@ -6,11 +6,14 @@
 # Needed to not show figure numbers
 #+REVEAL_EXTRA_CSS: ./stylesheet.css
 
+* 911bot
+  :PROPERTIES:
+  :CUSTOM_ID: first-slide
+  :END:
+#+CAPTION: An emergency contact storage and retrieval chat bot
+[[./logo.png]]
+
 * 911bot - The story
-
-** What is 911bot?
-
-   An emergency contact storage and retrieval system for internal use at Surge
 
 ** Why? Simon Hancock
    #+ATTR_HTML: :height 400px
@@ -114,7 +117,7 @@
    + Start DMing the bot (@911bot)
    + Make it a party
    + Don't request someone else's info unless you have their agreement
-   + I'll wait for a couple of minutes
+     + Feel free to request mine (@ssomani)
 
 ** So... what broke?
 
