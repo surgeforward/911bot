@@ -83,6 +83,12 @@
 
    #+INCLUDE: "../bot/plugins.py" src python :lines "70-85" 
 
+** Implementation (DataStore)
+   #+INCLUDE: ../bot/store.py src python :lines "11-14"
+   #+INCLUDE: ../bot/store.py src python :lines "15-27"
+
+** Implementation (DataStore)
+   #+INCLUDE: ../bot/store.py src python :lines "28-40"
 ** A bit about the technology
 
    + Bot uses Slack's Real-Time Messaging (RTM) API
@@ -129,13 +135,10 @@
    File an issue at the Github: https://github.com/surgeforward/911bot/issues
 
 * Things to check out
-
   + #911bot-dev on Slack
   + Git repo: https://github.com/surgeforward/911bot/
- 
-
+    
 * Questions?
-
   Some example questions:
   + What other approaches did you consider?
   + Do you really not have any unit tests?
