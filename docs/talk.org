@@ -1,6 +1,6 @@
 #+REVEAL_ROOT: https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0
 #+OPTIONS: toc:nil reveal_title_slide:nil num:nil
-#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_PLUGINS: (highlight notes)
 #+REVEAL_THEME: solarized
 
 # Needed to not show figure numbers
@@ -67,10 +67,9 @@
 *** Kubernetes
    
     #+CAPTION: @jmartin2 and @shrabok
-    [[./classified.jpg]]
-    + Secret API token
-    + Persistent storage
-    + Health check (WIP)
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "35-43"
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "47-50"
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "56-60"
 
 * Development
   + Python 2.7 (See [[https://github.com/surgeforward/911bot/issues/5][surgeforward#5]] to upgrade to Python 3)
