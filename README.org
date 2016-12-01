@@ -1,9 +1,30 @@
-# 911bot
-A 911 bot in memory of Simon Hancock
+This is a chatbot specifically meant to be helpful for remote workers in an emergency. When you are remote and something happens to you and your teammates are aware, they might have trouble getting you the help you need. So we created an emergency contact info bot in memory of [Simon Hancock](http://rochestercremation.com/obituary/joseph-simon-hancock)
 
-* Running
+The goals are as follows
 
-1. Create a new bot under "Custom Integrations": https://surgellc.slack.com/apps/manage/custom-integrations
+  * Provide information on how to contact a Surgeon's local emergency services and contact person
+  * Be as respectful of maintaining the secrecy of personal information as possible
+
+# Usage
+
+To interact with the bot send a direct message to `@911bot` with the text `help`. You can then interact with it via the `store-contact` command. 
+
+When storing your info you might consider how someone who saw you collapse on a call for example might go about getting you help. So for example you might type
+
+#+BEGIN_SRC
+@911bot> store-contact First try my wife Laura at xxx-xxx-xxxx or my brother at xxx-xxx-xxxx. 
+         The local 911 service number is xxx-xxx-xxxx, I usually work from either home (123 
+         First St Apt 2, New Orleans) or the local co-working space (555 Main St, New Orleans).
+         My cell phone number is xxx-xxx-xxxx.
+#+END_SRC
+
+This information will be stored by `@911bot`. You can access a user's information by messaging the bot with the `emergency @username` command which will walk you through a short prompt confirming that this is indeed a legitimate emergency. In order to encourage using this only for true emergencies **all access of emergency information will be recorded and the user will be notified when and by whom their information is requested.**
+
+You can check your currently stored info by typing `store-contact` by itself and check who has accessed your info with `list-access`.
+
+# Running
+
+1. Create a new bot under ["Custom Integrations"](https://surgellc.slack.com/apps/manage/custom-integrations)
 2. Set the environment variable ~SLACKBOT_API_TOKEN~ to the API token
 3. Install requirements: ~python -m pip install -r requirements.txt~
 4. Start: ~python run.py~
@@ -11,19 +32,13 @@ A 911 bot in memory of Simon Hancock
    1. define ~HEALTHCHECK_SLACK_TOKEN~ (should be a different user than the 911bot)
    2. run ~python run_healthcheck.py~ - This process will return 0 if check succeeded
 
-* Usage
+# Deployment with Docker
 
-#+BEGIN_SRC
-@911bot store-contact Helen (Wife): 555-555-5555 Sam (Dad): 666-666-6666
-@911bot emergency @someuser
-#+END_SRC
-
-* Deployment with docker
 #+BEGIN_SRC sh
   docker build -t 911bot .
   docker volume create --name contacts # or however you want to do it
   docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
 #+END_SRC
-* Design
 
+# Design
 See [[file:design.org][design.org]]
