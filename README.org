@@ -1,4 +1,4 @@
-This is a chatbot specifically meant to be helpful for remote workers in an emergency. When you are remote and something happens to you and your teammates are aware, they might have trouble getting you the help you need. So we created an emergency contact info bot in memory of [Simon Hancock](http://rochestercremation.com/obituary/joseph-simon-hancock)
+This is a chatbot specifically meant to be helpful for remote workers in an emergency. When you are remote and something happens to you and your teammates are aware, they might have trouble getting you the help you need. So we created an emergency contact info bot in memory of [[http://rochestercremation.com/obituary/joseph-simon-hancock][Simon Hancock]]
 
 The goals are as follows
 
@@ -7,7 +7,7 @@ The goals are as follows
 
 * Usage
 
-To interact with the bot send a direct message to `@911bot` with the text ~help~. You can then interact with it via the ~store-contact~ command. 
+To interact with the bot send a direct message to ~@911bot~ with the text ~help~. You can then interact with it via the ~store-contact~ command. 
 
 When storing your info you might consider how someone who saw you collapse on a call for example might go about getting you help. So for example you might type
 
@@ -24,7 +24,7 @@ You can check your currently stored info by typing ~store-contact~ by itself and
 
 * Running
 
-1. Create a new bot under ["Custom Integrations"](https://surgellc.slack.com/apps/manage/custom-integrations)
+1. Create a new bot under [[https://surgellc.slack.com/apps/manage/custom-integrations]["Custom Integrations"]]
 2. Set the environment variable ~SLACKBOT_API_TOKEN~ to the API token
 3. Install requirements: ~python -m pip install -r requirements.txt~
 4. Start: ~python run.py~
