@@ -1,0 +1,12 @@
+.figure-number {
+    display: none;
+}
+
+.reveal section img {
+    border: none;
+}
+
+#slide-first-slide img {
+    box-shadow: none;
+    background: none;
+}

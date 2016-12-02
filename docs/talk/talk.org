@@ -1,0 +1,147 @@
+#+REVEAL_ROOT: https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0
+#+OPTIONS: toc:nil reveal_title_slide:nil num:nil
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_THEME: solarized
+
+# Needed to not show figure numbers
+#+REVEAL_EXTRA_CSS: ./stylesheet.css
+
+* 911bot
+  :PROPERTIES:
+  :CUSTOM_ID: first-slide
+  :END:
+#+CAPTION: An emergency contact storage and retrieval chat bot
+[[./logo.png]]
+
+* The story
+
+** Why? Simon Hancock
+   #+ATTR_HTML: :height 400px
+   [[./simon.jpg]]
+   
+** What happened
+   #+ATTR_HTML: :height 500px
+   [[./mattsemail.png]]
+
+** Main issue: delay in contacting emergency services
+
+* The predictably nerdy response 
+
+** 911bot is born
+   [[./911bot_born.png]]
+   [[./911botdev.png]]
+
+** OK it's getting serious
+   [[./mvp_stories.png]]
+
+** And... It's official
+   [[./github.png]]
+
+** A team effort
+
+* Minimum Viable Product
+  + Store contact info through Slack securely
+  + Access information through Slack in an emergency
+  + Detect who has accessed emergency information
+  + Fallback access options in case 911bot is down
+
+** Basic usage
+   [[./usage.png]]
+
+* DevOps
+
+   + Docker + Kubernetes
+   + Built on http://quay.io
+
+** Design
+   [[../deployment.png]]
+ 
+** Implementation 
+
+*** Docker config
+
+    #+CAPTION: @cwspear
+    #+INCLUDE: "../Dockerfile" src dockerfile
+    Fallback: all information is stored on a persistent Kubernetes volume, in a
+    text file under the ~/contacts~ directory
+*** Kubernetes
+   
+    #+CAPTION: @jmartin2 and @shrabok
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "35-43"
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "47-50"
+    #+INCLUDE: ./kubeconfig.yaml src yaml :lines "56-60"
+
+* Development
+  + Python 2.7 (See [[https://github.com/surgeforward/911bot/issues/5][surgeforward#5]] to upgrade to Python 3)
+    + ~slackbot~ package for RTM API
+    + ~requests~ package for health check
+** A bit about the technology
+
+   + Bot uses Slack's Real-Time Messaging (RTM) API
+     + WebSockets using JSON as a payload format
+   + Health check uses Slack's HTTP RPC API
+     + Why? The RTM API is a PITA
+** Design (Emergency example)
+
+   #+CAPTION: The sequence of messaging is intended to get the information to the requesting user as soon as possible
+   [[../dynamic_emergency.png]]
+
+** Implementation (Emergency example)
+
+   #+INCLUDE: "../bot/plugins.py" src python :lines "70-85" 
+
+** Implementation (DataStore - recordAccess)
+   #+INCLUDE: ../bot/store.py src python :lines "44-48"
+** Implementation (DataStore)
+   #+INCLUDE: ../bot/store.py src python :lines "11-14"
+   #+INCLUDE: ../bot/store.py src python :lines "15-27"
+
+** Implementation (DataStore)
+   #+INCLUDE: ../bot/store.py src python :lines "28-40"
+
+* Testing 
+
+  + A full top to bottom test is included as part of ~run_healthcheck.py~
+  + This will run all the time to ensure the bot is operational and functioning
+    as intended
+
+* Status
+
+  + The bot is stable
+  + The data is as secure as other Surge services (JIRA, etc)
+  + Additionally, the bot informs the target user if someone attempts to access
+    the information through the bot
+
+* Your turn
+
+  + Add your info (let's hope we never have to access it!)
+    + ~@911bot store-contact <local contact, local pd, address>~
+  + Try and break it
+    + ~@911bot yes~
+
+  
+** 
+   [[./live.gif]]
+
+   + Start DMing the bot (@911bot)
+   + Make it a party
+   + Don't request someone else's info unless you have their agreement
+     + Feel free to request mine (@ssomani)
+   #+BEGIN_NOTES
+   Do it yourself in Slack
+   #+END_NOTES 
+
+** So... what broke?
+
+   :)
+
+   File an issue at the Github: https://github.com/surgeforward/911bot/issues
+
+* Things to check out
+  + #911bot-dev on Slack
+  + Git repo: https://github.com/surgeforward/911bot/
+    
+* Questions?
+  Some example questions:
+  + What other approaches did you consider?
+  + Do you really not have any unit tests?

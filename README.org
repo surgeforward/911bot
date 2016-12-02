@@ -41,4 +41,5 @@ You can check your currently stored info by typing ~store-contact~ by itself and
 #+END_SRC
 
 * Design
-See [[file:design.org][design.org]]
+
+See [[file:docs/design/design.org][design document]].
