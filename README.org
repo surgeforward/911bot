@@ -26,4 +26,4 @@ A 911 bot in memory of Simon Hancock
 #+END_SRC
 * Design
 
-See [[file:design.org][design.org]]
+See [[file:docs/design/design.org][design document]].
