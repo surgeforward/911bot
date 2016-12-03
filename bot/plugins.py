@@ -3,7 +3,7 @@ import re
 import store
 import logging
 
-@respond_to("help",re.IGNORECASE)
+@respond_to("^help$",re.IGNORECASE)
 def help(message):
     message.reply("""Commands: help, why, store-contact, emergency
 
@@ -13,13 +13,13 @@ def help(message):
     Example: list-access
     """)
 
-@respond_to("why",re.IGNORECASE)
+@respond_to("^why$",re.IGNORECASE)
 def why(message):
     message.reply("This bot was created by Surge Consulting in response to " +\
                   "the tragic events of 2016-08-24. " +\
                   "In memory of Simon Hancock.")
 
-@respond_to("store-contact(.*)",re.IGNORECASE)
+@respond_to("^store-contact(.*)",re.IGNORECASE)
 def storeContact(message,contactString):
     user = message._client.users[message._body['user']]
     contactString = contactString.strip()
@@ -43,7 +43,7 @@ def _getUserById(message,userid):
 g_emergencies = dict()
 g_useridMatcher = re.compile("<@(.*)>")
 
-@respond_to("emergency (.*)",re.IGNORECASE)
+@respond_to("^emergency (.*)",re.IGNORECASE)
 def emergency(message,targetUserNameOrId):
     logging.info("Emergency for {}".format(targetUserNameOrId))
     match = g_useridMatcher.match(targetUserNameOrId)
@@ -67,7 +67,7 @@ def emergency(message,targetUserNameOrId):
                    "the emergency information will be recorded.")
                   .format(targetUser['name']))
 
-@respond_to("yes",re.IGNORECASE)
+@respond_to("^yes$",re.IGNORECASE)
 def isEmergency(message):
     requestingUser = _getUserById(message,message._body['user'])
     targetUserId = g_emergencies[requestingUser['id']]
@@ -84,7 +84,7 @@ def isEmergency(message):
                                  " Please let @{0} know if you're OK")
                                  .format(requestingUser['name']))
 
-@respond_to("list-access")
+@respond_to("^list-access$")
 def listAccess(message):
     userid = message._body['user']
     logging.info("Retreiving acess for {}".format(userid))
