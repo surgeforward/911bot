@@ -11,6 +11,8 @@ def help(message):
     Example: store-contact Wife (Helen): 555-555-5555 Local PD: 555-555-5555
     Example: emergency @someuser
     Example: list-access
+    Example: store-contact
+    (The simple form of store-contact will display your current contact info)
     """)
 
 @respond_to(r"^\s*why",re.IGNORECASE)
