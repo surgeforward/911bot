@@ -2,3 +2,5 @@
 apitoken.py
 contacts
 *.html
+# Store test credentials here
+credentials.txt
