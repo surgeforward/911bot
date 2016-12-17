@@ -6,8 +6,15 @@ import argparse
 import json
 import time
 import os
+import codecs
+import sys
+
+sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--target-bot",default="911bot",
+                    help="The target bot")
 parser.add_argument("--slack-token",
                     default=os.environ.get("HEALTHCHECK_SLACK_TOKEN",None),
                     help="Slack API token. Must be different " +\
@@ -48,21 +55,21 @@ auth = slackCall("auth.test")
 users = slackCall('users.list',presence=1)['members']
 bot = None
 for user in users:
-    if user['name'] == '911bot':
+    if user['name'] == args.target_bot:
         bot = user
         break
 
 dm = slackCall('im.open',user=bot['id'])
 print sendMessage(dm,"Hello, world")
-print sendMessage(dm,"help")
+print sendMessage(dm," help ")
 dt = str(datetime.datetime.now()) + u"\u0028\u256f\u00b0\u25a1\u00b0\uff09\u256f\ufe35 \u253b\u2501\u253b"
-print sendMessage(dm,"store-contact %s" % (dt))
-verify = sendMessage(dm,"emergency {}".format(auth['user']))
+print sendMessage(dm," store-contact %s" % (dt))
+verify = sendMessage(dm," emergency {}".format(auth['user']))
 if verify.find("verify") == -1:
     raise RuntimeError,"Unexpected response to emergency: {}".format(verify)
 # Bot sends 3 messages in response, we need all of them and want the last
 # message
-info = sendMessage(dm,"YES",numMessages=3)[-1]['text']
-print info.encode('utf-8')
+info = sendMessage(dm," YES ",numMessages=3)[-1]['text']
+print info
 if info.find(dt) == -1:
     raise RuntimeError,"Contact info not retrieved correctly: {}".format(info)
