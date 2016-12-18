@@ -32,6 +32,13 @@ You can check your currently stored info by typing ~store-contact~ by itself and
    1. define ~HEALTHCHECK_SLACK_TOKEN~ (should be a different user than the 911bot)
    2. run ~python run_healthcheck.py~ - This process will return 0 if check succeeded
 
+* Testing
+
+(I know, it isn't kosher)
+
+Create a new slack team, and two separate users: one for the health check, one
+for the 911bot. Rejoice.
+
 * Deployment with Docker
 
 #+BEGIN_SRC sh
