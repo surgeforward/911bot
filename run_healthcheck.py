@@ -8,6 +8,11 @@ import time
 import os
 import codecs
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+#logger.setLevel(logging.DEBUG)
 
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
@@ -23,9 +28,13 @@ parser.add_argument("--slack-token",
 args = parser.parse_args()
 
 def slackCall(methodName,**params):
+    logger.debug(u"Calling method {}".format(methodName))
     url = "https://slack.com/api/" + methodName
     if params is None:
         params = {}
+    logger.debug(u"Outputting params:")
+    for param in params:
+        logger.debug(u"{}={}".format(param,params[param]))
     params['token'] = args.slack_token
     result = requests.post(url,params=params).json()
     if result['ok']: return result
@@ -55,7 +64,9 @@ auth = slackCall("auth.test")
 users = slackCall('users.list',presence=1)['members']
 bot = None
 for user in users:
+    logger.debug(u"Examining user {}".format(user['name']))
     if user['name'] == args.target_bot:
+        logger.debug(u"Found bot {}".format(args.target_bot))
         bot = user
         break
 
