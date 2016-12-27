@@ -22,22 +22,25 @@ This information will be stored by `@911bot`. You can access a user's informatio
 
 You can check your currently stored info by typing ~store-contact~ by itself and check who has accessed your info with ~list-access~.
 
-* Running
+* Running 911Bot
 
 1. Create a new bot under [[https://surgellc.slack.com/apps/manage/custom-integrations]["Custom Integrations"]]
 2. Set the environment variable ~SLACKBOT_API_TOKEN~ to the API token
 3. Install requirements: ~python -m pip install -r requirements.txt~
 4. Start: ~python run.py~
-5. For health check:
-   1. define ~HEALTHCHECK_SLACK_TOKEN~ (should be a different user than the 911bot)
-   2. run ~python run_healthcheck.py~ - This process will return 0 if check succeeded
+
+
+* Running a health check:
+
+1. From your team's admin page, create a test user.  (One way is to send an invitation to your own email account.)
+2. Give the user a test token under [[https://api.slack.com/docs/oauth-test-tokens]["Test Token Generator"]].
+3. define ~HEALTHCHECK_SLACK_TOKEN~ with the value of the test token you just generated.
+4. run ~python run_healthcheck.py~ - This process will return 0 if check succeeded
 
 * Testing
 
-(I know, it isn't kosher)
-
-Create a new slack team, and two separate users: one for the health check, one
-for the 911bot. Rejoice.
+To set up a personal testing environment, create a new slack team with a user and a bot: the former
+for the health check, the latter for the 911bot.
 
 * Deployment with Docker
 
