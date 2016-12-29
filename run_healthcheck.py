@@ -71,16 +71,16 @@ for user in users:
         break
 
 dm = slackCall('im.open',user=bot['id'])
-print sendMessage(dm,"Hello, world")
-print sendMessage(dm," help ")
+logger.info(sendMessage(dm,"Hello, world"))
+logger.info(sendMessage(dm," help "))
 dt = str(datetime.datetime.now()) + u"\u0028\u256f\u00b0\u25a1\u00b0\uff09\u256f\ufe35 \u253b\u2501\u253b"
-print sendMessage(dm," store-contact %s" % (dt))
+logger.info(sendMessage(dm," store-contact %s" % (dt)))
 verify = sendMessage(dm," emergency {}".format(auth['user']))
 if verify.find("verify") == -1:
     raise RuntimeError,"Unexpected response to emergency: {}".format(verify)
 # Bot sends 3 messages in response, we need all of them and want the last
 # message
 info = sendMessage(dm," YES ",numMessages=3)[-1]['text']
-print info
+logger.info(info)
 if info.find(dt) == -1:
     raise RuntimeError,"Contact info not retrieved correctly: {}".format(info)
