@@ -18,6 +18,9 @@ class SlackbotResponse(IResponse):
     def send(self,message):
         self.message.reply(message)
 
+logger = logging.getLogger(__name__)
+#logger.setLevel(logging.DEBUG)
+
 @respond_to(r"^\s*help",re.IGNORECASE)
 def help(message):
     message.reply("""Commands: help, why, store-contact, emergency
@@ -32,6 +35,7 @@ def help(message):
 
 @respond_to(r"^\s*why",re.IGNORECASE)
 def why(message):
+    logger.debug(message);
     bot = The911Bot()
     response = SlackbotResponse(message)
     bot.why(response)
@@ -64,7 +68,7 @@ g_useridMatcher = re.compile("<@(.*)>")
 
 @respond_to(r"^\s*emergency (.*)",re.IGNORECASE)
 def emergency(message,targetUserNameOrId):
-    logging.info(u"Emergency for {}".format(targetUserNameOrId))
+    logger.info(u"Emergency for {}".format(targetUserNameOrId))
     match = g_useridMatcher.match(targetUserNameOrId)
     if match:
         targetUserId = match.group(1)
@@ -106,7 +110,7 @@ def isEmergency(message):
 @respond_to(r"^\s*list-access")
 def listAccess(message):
     userid = message._body['user']
-    logging.info(u"Retreiving acess for {}".format(userid))
+    logger.info(u"Retreiving acess for {}".format(userid))
     accesses = store.getAccess(userid)
     if not accesses:
         message.reply("Your information has never been accessed")
