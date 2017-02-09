@@ -1,9 +1,11 @@
-This is a chatbot specifically meant to be helpful for remote workers in an emergency. When you are remote and something happens to you and your teammates are aware, they might have trouble getting you the help you need. So we created an emergency contact info bot in memory of [[http://rochestercremation.com/obituary/joseph-simon-hancock][Simon Hancock]]
+911bot is a chatbot specifically meant to be helpful for remote workers in an emergency. When you are remote and something happens to you and your teammates are aware, they might have trouble getting you the help you need. So we created an emergency contact info bot in memory of [[http://rochestercremation.com/obituary/joseph-simon-hancock][Simon Hancock]]
 
 The goals are as follows
 
   * Provide information on how to contact a Surgeon's local emergency services and contact person
   * Be as respectful of maintaining the secrecy of personal information as possible
+
+By default 911bot integrates with Slack and provides a chat interface for storing emergency contact information and retrieving information on someone. Users are actively discouraged by the bot from retrieving information for any non-emergency purposes and any access is logged and notified. All contact information is accessible only to the system administrator.
 
 * Usage
 
