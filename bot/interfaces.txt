@@ -1,0 +1,19 @@
+"""This script contains the class The911Bot and the interfaces needed to use it.
+
+>>> from interfaces import IResponse, The911Bot
+>>> class MessageDemo:
+...     def output(self, text):
+...         print text
+>>> class ResponseImp (IResponse):
+...     def __init__(self, messageObject):
+...         self.myMessageObject = messageObject
+...     def send(self,message):
+...         self.myMessageObject.output(message)
+>>>
+>>> messageObject = MessageDemo()
+>>> response = ResponseImp(messageObject)
+>>> the911Bot = The911Bot()
+>>> the911Bot.why(response)
+This bot was created by Surge Consulting in response to the tragic events of 2016-08-24. In memory of Simon Hancock.
+>>>
+"""
