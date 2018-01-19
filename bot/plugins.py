@@ -2,6 +2,24 @@ from slackbot.bot import respond_to
 import re
 import store
 import logging
+from interfaces import IUser, IResponse, The911Bot
+
+class SlackbotUser(IUser):
+    def __init__(self,slackbotuser):
+        self.user = slackbotuser
+
+    def id(self):
+        return self.user['id']
+
+class SlackbotResponse(IResponse):
+    def __init__(self,message):
+        self.message = message
+
+    def send(self,message):
+        self.message.reply(message)
+
+logger = logging.getLogger(__name__)
+#logger.setLevel(logging.DEBUG)
 
 @respond_to(r"^\s*help",re.IGNORECASE)
 def help(message):
@@ -17,9 +35,10 @@ def help(message):
 
 @respond_to(r"^\s*why",re.IGNORECASE)
 def why(message):
-    message.reply("This bot was created by Surge Consulting in response to " +\
-                  "the tragic events of 2016-08-24. " +\
-                  "In memory of Simon Hancock.")
+    logger.debug(message);
+    bot = The911Bot()
+    response = SlackbotResponse(message)
+    bot.why(response)
 
 @respond_to(r"^\s*store-contact(.*)",re.IGNORECASE)
 def storeContact(message,contactString):
@@ -49,7 +68,7 @@ g_useridMatcher = re.compile("<@(.*)>")
 
 @respond_to(r"^\s*emergency (.*)",re.IGNORECASE)
 def emergency(message,targetUserNameOrId):
-    logging.info(u"Emergency for {}".format(targetUserNameOrId))
+    logger.info(u"Emergency for {}".format(targetUserNameOrId))
     match = g_useridMatcher.match(targetUserNameOrId)
     if match:
         targetUserId = match.group(1)
@@ -91,7 +110,7 @@ def isEmergency(message):
 @respond_to(r"^\s*list-access")
 def listAccess(message):
     userid = message._body['user']
-    logging.info(u"Retreiving acess for {}".format(userid))
+    logger.info(u"Retreiving acess for {}".format(userid))
     accesses = store.getAccess(userid)
     if not accesses:
         message.reply("Your information has never been accessed")
