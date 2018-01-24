@@ -1,0 +1,79 @@
+911bot is a chatbot specifically meant to be helpful for remote workers in an
+emergency. When you are remote and something happens to you and your teammates
+are aware, they might have trouble getting you the help you need. So we created
+an emergency contact info bot in memory of
+[Simon Hancock](http://rochestercremation.com/obituary/joseph-simon-hancock)
+
+The goals are as follows
+
+-   Provide information on how to contact a Surgeon's local emergency services
+    and contact person
+-   Be as respectful of maintaining the secrecy of personal information as
+    possible
+
+By default 911bot integrates with Slack and provides a chat interface for storing emergency contact information and retrieving information on someone. Users are actively discouraged by the bot from retrieving information for any non-emergency purposes and any access is logged and notified. All contact information is accessible only to the system administrator.
+
+# Usage
+
+To interact with the bot send a direct message to `@911bot` with the text
+`help`. You can then interact with it via the `store-contact` command.
+
+When storing your info you might consider how someone who saw you collapse on a
+call for example might go about getting you help. So for example you might type
+
+    @911bot> store-contact First try my wife Laura at xxx-xxx-xxxx or my brother at xxx-xxx-xxxx.
+             The local 911 service number is xxx-xxx-xxxx, I usually work from either home (123
+             First St Apt 2, New Orleans) or the local co-working space (555 Main St, New Orleans).
+             My cell phone number is xxx-xxx-xxxx.
+
+This information will be stored by \`@911bot\`. You can access a user's
+information by messaging the bot with the `emergency @username` command which
+will walk you through a short prompt confirming that this is indeed a legitimate
+emergency. In order to encourage using this only for true emergencies **all
+access of emergency information will be recorded and the user will be notified
+when and by whom their information is requested.**
+
+You can check your currently stored info by typing `store-contact` by itself and
+check who has accessed your info with `list-access`.
+
+
+# Running 911Bot
+
+1.  Create a new bot under
+    ["Custom Integrations"](https://surgellc.slack.com/apps/manage/custom-integrations)
+2.  Set the environment variable `SLACKBOT_API_TOKEN` to the API token
+3.  Install requirements: `python -m pip install -r requirements.txt`
+4.  Start: `python run.py`
+
+
+# Running a health check:
+
+1.  From your team's admin page, create a test user. (One way is to send an
+    invitation to your own email account.)
+2.  Give the user a test token under
+    ["Test Token Generator"](https://api.slack.com/docs/oauth-test-tokens).
+3.  define `HEALTHCHECK_SLACK_TOKEN` with the value of the test token you just
+    generated.
+4.  run `python run_healthcheck.py` - This process will return 0 if check
+    succeeded
+
+
+# Testing
+
+To set up a personal testing environment, create a new slack team with a user
+and a bot: the former for the health check, the latter for the 911bot.
+
+# Deployment with Docker
+
+    docker build -t 911bot .
+    docker volume create --name contacts # or however you want to do it
+    docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+
+# Contributing
+
+See [docs/contributing.md](docs/contributing.md)
+
+# Design
+
+See [design document](docs/design/design.org).
+
