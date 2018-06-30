@@ -1,17 +1,60 @@
+import datetime
+import logging
+
 class Storage(object):
-    """ Virtual base class, may have shared functionality.
+    """ Virtual Base Class for Storage Implementations.
+        
+        Minimal implementation requires overriding the following:
+            _getRecord(..)
+            _storeRecord(..)
+            initialize(..) (if nec)
+            
+        Sharing _getEmptyContacts(..) ensures that all storage implementations
+        share basic properties.
     """
+    def _getRecord(self, userid):
+        ''' Takes userid and returns record if it exists, otherwise and 
+        blank contact record (see _getEmptyContact(..)). '''
+        
+        raise Exception("_getRecord must be implemented through child class")
+
+    def _storeRecord(self, record):
+        ''' Takes contact record and stores it. See _getEmptyContact for record format.'''
+        raise Exception("_storeRecord must be implemented through child class")
+
+    def _getEmptyContact(self, userid):
+        return {
+            'id': userid,
+            'contact': "No contact information stored",
+            'access':[],
+            'context':{} # this is solely to allow for "grepping" in case of
+            # emergency
+        }
+        
     def initialize(self):
         pass # does not need to be implemented
       
     def storeContact(self, userId, contactString, context):
-        raise Exception("Storage Classes must override storeContact")
-        
+        logging.info("Storing {0} for {1}".format(contactString,userId))
+        record = self._getRecord(userId)
+
+        record.update({
+            'id':userId,
+            'contact': contactString,
+            'context': context
+        })
+        self._storeRecord(record)
+
     def getContact(self, userid):
-        raise Exception("Storage Classes must override getContact")
-        
+        logging.info("Retreiving info for {}".format(userid))
+        return self._getRecord(userid)['contact']
+
     def recordAccess(self, userid,requesting_user):
-        raise Exception("Storage Classes must override recordAccess")
-        
+        logging.info("record Access")
+        record = self._getRecord(userid)
+        record['access'].append((str(datetime.datetime.now()),requesting_user))
+        self._storeRecord(record)
+
     def getAccess(self, userid):
-        raise Exception("Storage Classes must override getAccess")
+        record = self._getRecord(userid)
+        return record['access']

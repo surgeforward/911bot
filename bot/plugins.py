@@ -81,6 +81,7 @@ def emergency(message,targetUserNameOrId):
     requestingUserId = requestingUser['id']
     g_emergencies[requestingUserId] = targetUserId
     targetUser = _getUserById(message,targetUserId)
+    logger.info(u"User Name is '{}.'".format(targetUser['name']))
     message.reply("TL;DR Is this an emergency? Type '@911bot YES' if so")
     message.reply((u"Note that you are trying to get emergency " +\
                    u"information for {0}. This service should not be " + \

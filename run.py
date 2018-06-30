@@ -8,10 +8,9 @@ def main():
     logging.basicConfig(level=logging.INFO)
     logging.info("Running")
 
-    # checkStorage() # exception if no storage
-    import bot.store
-    # bot = Bot()
-    # bot.run()
+    checkStorage() # exception if no storage
+    bot = Bot()
+    bot.run()
 
 if __name__ == "__main__":
     main()
