@@ -69,16 +69,19 @@ If `BOT911_STORAGE_METHOD` environment variable is not set, default is `DiskStor
 
 ### Environment Variables:
     BOT911_STORAGE_METHOD=DiskStorage
-    CONTACT_DIRECTORY: directory to store <userId>.json files.
+    CONTACT_DIRECTORY: directory to store `<userId>.json` files.
                        default: 'contacts'
 
 ## S3Storage
+
+NOTE: 991bot will not create the bucket, so create the bucket, a user if need be, and obtain
+an AWS Access Key and Secret. Set the following environment variables.
 
 ### Environment Variables:
         BOT911_STORAGE_METHOD=S3Storage
         AWS_ACCESS_KEY_ID:      key used directly by boto3
         AWS_SECRET_ACCESS_KEY:  secret used directly by boto3 
-        BOT911_S3_BUCKET:       name of a PRE-EXISTING bucket for <userId>.json blobs
+        BOT911_S3_BUCKET:       name of a PRE-EXISTING bucket for `<userId>.json` blobs
         
 
 ## Custom
@@ -104,7 +107,23 @@ and a bot: the former for the health check, the latter for the 911bot.
 
     docker build -t 911bot .
     docker volume create --name contacts # or however you want to do it
-    docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+    
+## DiskStorage
+    
+    docker run -d --name 911bot \
+        -e SLACKBOT_API_TOKEN=<API TOKEN> \
+        -e BOT911_STORAGE_METHOD="DiskStorage" \
+        -v contacts:/contacts 911bot
+
+## S3Storage
+
+    docker run -d --name 911bot \
+        -e SLACKBOT_API_TOKEN=<API TOKEN> \
+        -e AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY>\
+        -e AWS_SECRET_ACCESS_KEY=<AWS_SECRET> \
+        -e BOT911_S3_BUCKET=<S3 BUCKET NAME> \
+        -e BOT911_STORAGE_METHOD="S3Storage" \
+        911bot
 
 # Contributing
 

@@ -12,6 +12,7 @@ class Storage(object):
         Sharing _getEmptyContacts(..) ensures that all storage implementations
         share basic properties.
     """
+    
     def _getRecord(self, userid):
         ''' Takes userid and returns record if it exists, otherwise and 
         blank contact record (see _getEmptyContact(..)). '''

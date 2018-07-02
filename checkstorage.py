@@ -1,7 +1,9 @@
-# tbh this is here b/c errors in plugin loading do not bubble up (see slackbot manager.py)
-# and so we want to check that this imports before running the bot.
-# the module initialized on load.
+# tbh this is here b/c errors while loading plugins do not bubble up (see slackbot file manager.py)
+# We want to check that this imports before running the bot.
+
 def checkStorage():
     import bot.store
-    # could do other checks but module throws exception if cannot initialize
+    # module throws exception if cannot initialize.
+    # Note: could return storageObject if deemed useful.
+    
 
