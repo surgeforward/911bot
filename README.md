@@ -36,10 +36,9 @@ when and by whom their information is requested.**
 You can check your currently stored info by typing `store-contact` by itself and
 check who has accessed your info with `list-access`.
 
-
 # Running 911Bot
 
-Default storage method is DiskStorage, which requires write access to the current where 
+Default storage method is `DiskStorage`, which requires write access to the current directory where 
 the bot is run. See below to use alternate (S3 storage is available).
 
 1.  Create a new bot under
