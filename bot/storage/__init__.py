@@ -27,5 +27,6 @@ if storageMethod not in storageTypes:
   raise EnvironmentError(
       "BOT911_STORAGE_METHOD is set to '{}' which is not supported".format(storageMethod))
 
-storageObject = storageTypes[storageMethod]()
 storageObject.storageMethod = storageMethod
+storageObject = storageTypes[storageMethod]()
+
