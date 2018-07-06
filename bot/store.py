@@ -7,7 +7,7 @@ import traceback
 
 import storage
 
-storageObject = "original"
+storageObject = None
 
 def _raiseIfNoStorageObject():
     if not storageObject:
