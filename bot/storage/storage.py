@@ -2,21 +2,20 @@ import datetime
 import logging
 
 class Storage(object):
-    """ Virtual Base Class for Storage Implementations.
+    """ Base Class for Storage Implementations. Requires child completion class. 
         
         Minimal implementation requires overriding the following:
             _getRecord(..)
             _storeRecord(..)
             initialize(..) (if nec)
             
-        Sharing _getEmptyContacts(..) ensures that all storage implementations
+        Sharing _getEmptyContact(..) ensures that all storage implementations
         share basic properties.
     """
     
     def _getRecord(self, userid):
         ''' Takes userid and returns record if it exists, otherwise and 
         blank contact record (see _getEmptyContact(..)). '''
-        
         raise Exception("_getRecord must be implemented through child class")
 
     def _storeRecord(self, record):
@@ -32,9 +31,6 @@ class Storage(object):
             # emergency
         }
         
-    def initialize(self):
-        pass # does not need to be implemented
-      
     def storeContact(self, userId, contactString, context):
         logging.info("Storing {0} for {1}".format(contactString,userId))
         record = self._getRecord(userId)

@@ -68,19 +68,18 @@ If `BOT911_STORAGE_METHOD` environment variable is not set, default is `DiskStor
 
 ### Environment Variables:
     BOT911_STORAGE_METHOD=DiskStorage
-    CONTACT_DIRECTORY: directory to store `<userId>.json` files.
-                       default: 'contacts'
+    CONTACT_DIRECTORY=<directory to store <userId>.json files> # default: 'contacts'
 
 ## S3Storage
 
-NOTE: 991bot will not create the bucket, so create the bucket, a user if need be, and obtain
+NOTE: 911bot will not create the bucket, so create the bucket, a user if need be, and obtain
 an AWS Access Key and Secret. Set the following environment variables.
 
 ### Environment Variables:
         BOT911_STORAGE_METHOD=S3Storage
-        AWS_ACCESS_KEY_ID:      key used directly by boto3
-        AWS_SECRET_ACCESS_KEY:  secret used directly by boto3 
-        BOT911_S3_BUCKET:       name of a PRE-EXISTING bucket for `<userId>.json` blobs
+        AWS_ACCESS_KEY_ID=<key used directly by boto3>
+        AWS_SECRET_ACCESS_KEY=<secret used directly by boto3>
+        BOT911_S3_BUCKET=<name of a PRE-EXISTING bucket for <userId>.json blobs>
         
 
 ## Custom
@@ -91,8 +90,7 @@ targets or methods see the `./bot/storage` directory.
 1. Create particular storage class in `./bot/storage/`. It should descend from 
    the Storage class in `./bot/storage/storage.py`. 
 1. A new storage class can be created by implementing `_getRecord(..)`, 
-   `_storeRecord(..)`, and, if needed, `initialize(..)`. See `./bot/storage/diskstorage.py` 
-   as an example. 
+   `_storeRecord(..)`.
 1. Add the class to `storageTypes` in `./bot/storage/__init__.py`.
 1. The `BOT911_STORAGE_METHOD` env variable cooresponds to the key in the `storageTypes`
    object.

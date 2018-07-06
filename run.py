@@ -2,13 +2,13 @@ from slackbot.bot import Bot
 import logging
 import os
 
-from checkstorage import checkStorage
+from bot.store import createStorageObject
 
 def main():
     logging.basicConfig(level=logging.INFO)
     logging.info("Running")
 
-    checkStorage() # exception if no storage
+    createStorageObject() # exception if no storage
     bot = Bot()
     bot.run()
 
