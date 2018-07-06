@@ -72,8 +72,8 @@ If `BOT911_STORAGE_METHOD` environment variable is not set, default is `DiskStor
 
 ## S3Storage
 
-NOTE: 911bot will not create the bucket, so create the bucket, a user if need be, and obtain
-an AWS Access Key and Secret. Set the following environment variables.
+NOTE: 911bot will not create the bucket, so create the bucket yourself, 
+a user if need be, and obtain an AWS Access Key and Secret. Set the following environment variables.
 
 ### Environment Variables:
         BOT911_STORAGE_METHOD=S3Storage
@@ -89,7 +89,7 @@ targets or methods see the `./bot/storage` directory.
 
 1. Create particular storage class in `./bot/storage/`. It should descend from 
    the Storage class in `./bot/storage/storage.py`. 
-1. A new storage class can be created by implementing `_getRecord(..)`, 
+1. A new storage class can be created by implementing `_getRecord(..)` and
    `_storeRecord(..)`.
 1. Add the class to `storageTypes` in `./bot/storage/__init__.py`.
 1. The `BOT911_STORAGE_METHOD` env variable cooresponds to the key in the `storageTypes`
