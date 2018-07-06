@@ -10,7 +10,6 @@ import storage
 storageObject = "original"
 
 def _raiseIfNoStorageObject():
-    logging.info("raiseifnot {}".format(storageObject))
     if not storageObject:
         raise Exception("Storage Object was not initialized.")
 
@@ -22,7 +21,7 @@ def createStorageObject():
         logging.error("Can Not Initialize Storage Method '{}'".format(storage.storageMethod))
         raise
     
-    logging.info("creating storage object {}".format(storageObject))
+    logging.info("created storage object {}".format(storageObject))
     
     return storageObject
 

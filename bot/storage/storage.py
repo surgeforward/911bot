@@ -19,7 +19,7 @@ class Storage(object):
         raise Exception("_getRecord must be implemented through child class")
 
     def _storeRecord(self, record):
-        ''' Takes contact record and stores it. See _getEmptyContact for record format.'''
+        ''' Takes contact record and stores it. See _getEmptyContact for record schema.'''
         raise Exception("_storeRecord must be implemented through child class")
 
     def _getEmptyContact(self, userid):
