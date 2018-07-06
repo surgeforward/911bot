@@ -43,5 +43,6 @@ def createStorageObject():
     
     storageObject = storageTypes[storageMethod]()
     storageObject.storageMethod = storageMethod
+    
     return storageObject
 

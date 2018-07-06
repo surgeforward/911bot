@@ -1,3 +1,6 @@
+''' store.py
+    Application level interface to contact info storage.
+'''
 import logging
 import json
 import os
