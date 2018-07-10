@@ -1,2 +1,3 @@
 slackbot
 requests
+boto3

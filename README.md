@@ -36,8 +36,10 @@ when and by whom their information is requested.**
 You can check your currently stored info by typing `store-contact` by itself and
 check who has accessed your info with `list-access`.
 
-
 # Running 911Bot
+
+Default storage method is `DiskStorage`, which requires write access to the current directory where 
+the bot is run. See below to use alternate (S3 storage is available).
 
 1.  Create a new bot under
     ["Custom Integrations"](https://surgellc.slack.com/apps/manage/custom-integrations)
@@ -57,6 +59,41 @@ check who has accessed your info with `list-access`.
 4.  run `python run_healthcheck.py` - This process will return 0 if check
     succeeded
 
+# Storage Methods
+
+If `BOT911_STORAGE_METHOD` environment variable is not set, default is `DiskStorage`, set in
+`./bot/storage/__init__.py`. Alternate value is `S3Storage` for using AWS S3.
+
+## DiskStorage
+
+### Environment Variables:
+    BOT911_STORAGE_METHOD=DiskStorage
+    CONTACT_DIRECTORY=<directory to store <userId>.json files> # default: 'contacts'
+
+## S3Storage
+
+NOTE: 911bot will not create the bucket, so create the bucket yourself, 
+a user if need be, and obtain an AWS Access Key and Secret. Set the following environment variables.
+
+### Environment Variables:
+        BOT911_STORAGE_METHOD=S3Storage
+        AWS_ACCESS_KEY_ID=<key used directly by boto3>
+        AWS_SECRET_ACCESS_KEY=<secret used directly by boto3>
+        BOT911_S3_BUCKET=<name of a PRE-EXISTING bucket for <userId>.json blobs>
+        
+
+## Custom
+
+911bot supports storage of the contact either on disk or in S3. To create other storage
+targets or methods see the `./bot/storage` directory. 
+
+1. Create particular storage class in `./bot/storage/`. It should descend from 
+   the Storage class in `./bot/storage/storage.py`. 
+1. A new storage class can be created by implementing `_getRecord(..)` and
+   `_storeRecord(..)`.
+1. Add the class to `storageTypes` in `./bot/storage/__init__.py`.
+1. The `BOT911_STORAGE_METHOD` env variable cooresponds to the key in the `storageTypes`
+   object.
 
 # Testing
 
@@ -67,7 +104,23 @@ and a bot: the former for the health check, the latter for the 911bot.
 
     docker build -t 911bot .
     docker volume create --name contacts # or however you want to do it
-    docker run -d --name 911bot -e SLACKBOT_API_TOKEN=<API TOKEN> -v contacts:/contacts 911bot
+    
+## DiskStorage
+    
+    docker run -d --name 911bot \
+        -e SLACKBOT_API_TOKEN=<API TOKEN> \
+        -e BOT911_STORAGE_METHOD="DiskStorage" \
+        -v contacts:/contacts 911bot
+
+## S3Storage
+
+    docker run -d --name 911bot \
+        -e SLACKBOT_API_TOKEN=<API TOKEN> \
+        -e AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY>\
+        -e AWS_SECRET_ACCESS_KEY=<AWS_SECRET> \
+        -e BOT911_S3_BUCKET=<S3 BUCKET NAME> \
+        -e BOT911_STORAGE_METHOD="S3Storage" \
+        911bot
 
 # Contributing
 

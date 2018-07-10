@@ -40,7 +40,7 @@ def slackCall(methodName,**params):
     if result['ok']: return result
     else: raise RuntimeError,"Error calling %s: %s" % (methodName,result)
 
-def sendMessage(channel, message,numMessages = 1):
+def sendMessage(channel, message,numMessages = 1, wait=1):
     msg = slackCall("chat.postMessage",
                     channel=dm['channel']['id'],
                     text=message,
@@ -50,10 +50,16 @@ def sendMessage(channel, message,numMessages = 1):
     # Sleep so that the message has time to do the healthcheck -> slack ->
     # 911bot -> filesystem -> slack round trip. I mean, it should really be
     # more than 1 second to be safe. This is a hack.
-    time.sleep(1)
-
+    time.sleep(wait)
     messages = slackCall("im.history",channel=channel['channel']['id'],
                          count=numMessages)['messages']
+    
+    # messages not always in time order, sort by timestamp
+    messages.sort(key = lambda item: item['ts'])
+    
+    # for msg in messages:
+    #     logger.info('msgline {}'.format(msg['text'].encode('utf8')))
+    
     if numMessages == 1:
         return messages[0]['text']
     else:
@@ -78,9 +84,8 @@ logger.info(sendMessage(dm," store-contact %s" % (dt)))
 verify = sendMessage(dm," emergency {}".format(auth['user']))
 if verify.find("verify") == -1:
     raise RuntimeError,"Unexpected response to emergency: {}".format(verify)
-# Bot sends 3 messages in response, we need all of them and want the last
-# message
-info = sendMessage(dm," YES ",numMessages=3)[-1]['text']
+# Bot sends 3 messages in response, we need all of them and want the first message
+info = sendMessage(dm," YES ",numMessages=3, wait=5)[0]['text']
 logger.info(info)
 if info.find(dt) == -1:
     raise RuntimeError,"Contact info not retrieved correctly: {}".format(info)

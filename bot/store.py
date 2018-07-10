@@ -1,56 +1,47 @@
+''' store.py
+    Application level interface to contact info storage.
+'''
 import logging
 import json
 import os
+import sys
 import datetime
+import traceback
 
-g_directory = os.environ.get("CONTACTS_DIRECTORY","contacts")
+import storage
 
-def _getFile(userid):
-    return os.path.join(g_directory,userid+'.json')
+storageObject = None
 
-def _storeRecord(record):
-    with open(_getFile(record['id']),'w') as f:
-        f.write(json.dumps(record))
+def _raiseIfNoStorageObject():
+    if not storageObject:
+        raise Exception("Storage Object was not initialized.")
 
-def _getRecord(userid):
-    record = {
-        'id': userid,
-        'contact': "No contact information stored",
-        'access':[],
-        'context':{} # this is solely to allow for "grepping" in case of
-                     # emergency
-    }
-    if os.path.isfile(_getFile(userid)):
-        with open(_getFile(userid),'r') as f:
-            record.update(json.load(f))
-    return record
+def createStorageObject():
+    global storageObject
+    try:
+        storageObject = storage.createStorageObject()
+    except:
+        logging.error("Can Not Initialize Storage Method '{}'".format(storage.storageMethod))
+        raise
+    
+    logging.info("created storage object {}".format(storageObject))
+    
+    return storageObject
 
-def storeContact(userId,contactString,context):
-    logging.info("Storing {0} for {1}".format(contactString,userId))
-    record = _getRecord(userId)
-
-    record.update({
-        'id':userId,
-        'contact': contactString,
-        'context': context
-    })
-
-    _storeRecord(record)
+def storeContact(userId, contactString, context):
+    _raiseIfNoStorageObject();
+    storageObject.storeContact(userId, contactString, context)
 
 def getContact(userid):
-    logging.info("Retreiving info for {}".format(userid))
-    return _getRecord(userid)['contact']
+    _raiseIfNoStorageObject();
+    return storageObject.getContact(userid)
 
 def recordAccess(userid,requesting_user):
-    record = _getRecord(userid)
-    record['access'].append((str(datetime.datetime.now()),requesting_user))
-    _storeRecord(record)
+    _raiseIfNoStorageObject();
+    storageObject.recordAccess(userid, requesting_user)
 
 def getAccess(userid):
-    record = _getRecord(userid)
-    return record['access']
+    _raiseIfNoStorageObject();
+    return storageObject.getAccess(userid)
 
-if not os.path.isdir(g_directory):
-    os.makedirs(g_directory)
-
-os.system("ls {}".format(g_directory))
+    

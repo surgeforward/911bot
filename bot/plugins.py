@@ -81,6 +81,7 @@ def emergency(message,targetUserNameOrId):
     requestingUserId = requestingUser['id']
     g_emergencies[requestingUserId] = targetUserId
     targetUser = _getUserById(message,targetUserId)
+    logger.info(u"User Name is '{}.'".format(targetUser['name']))
     message.reply("TL;DR Is this an emergency? Type '@911bot YES' if so")
     message.reply((u"Note that you are trying to get emergency " +\
                    u"information for {0}. This service should not be " + \
@@ -93,6 +94,9 @@ def emergency(message,targetUserNameOrId):
 @respond_to(r"^\s*yes\s*$",re.IGNORECASE)
 def isEmergency(message):
     requestingUser = _getUserById(message,message._body['user'])
+    if requestingUser['id'] not in g_emergencies:
+        message.reply(u"You have no pending emergency information requests. Try 'emergency @username' first.")
+        return
     targetUserId = g_emergencies[requestingUser['id']]
     del g_emergencies[requestingUser['id']]
     contact = store.getContact(targetUserId)
